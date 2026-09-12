@@ -135,10 +135,27 @@ cmd_deploy() {
     printf '\n.vercel\n' >> .gitignore
     note ".vercel in .gitignore aufgenommen."
   fi
+  # vercel link schreibt .vercel selbst in die .gitignore; diese eine Änderung wird committet,
+  # alles andere bleibt ein Fehler, weil sonst das Git-Deploy einen anderen Stand baut.
+  dirty="$(git status --porcelain)"
+  if [[ -n "$dirty" ]]; then
+    if [[ "$dirty" == " M .gitignore" ]]; then
+      git add .gitignore
+      git commit -q -m "chore: ignore .vercel" >&2
+      git push -q origin "$branch" >&2
+      note ".gitignore-Änderung von vercel link committet und gepusht."
+    else
+      fail "vercel link hat unerwartete Änderungen hinterlassen: $dirty"
+    fi
+  fi
 
   # 2. Git-Anbindung
   note "Verbinde $repo mit dem Vercel-Projekt (Auto-Deploy bei Push) ..."
-  if ! vercel git connect --yes "${sargs[@]}" >&2; then
+  connect_out="$(vercel git connect --yes "${sargs[@]}" 2>&1)" && connect_ok=1 || connect_ok=0
+  printf '%s
+' "$connect_out" >&2
+  # Neuere CLIs verbinden das Repo schon bei vercel link; "already connected" endet dann mit Exit 1.
+  if [[ $connect_ok -eq 0 ]] && ! printf '%s' "$connect_out" | grep -qi "already connected"; then
     fail "vercel git connect schlug fehl. Die Vercel-GitHub-App braucht Zugriff auf '$owner': $VERCEL_APP_INSTALL_URL (dort '$owner' wählen und das Repository freigeben), danach erneut ausführen."
   fi
 
