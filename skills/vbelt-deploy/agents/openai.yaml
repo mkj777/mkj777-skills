@@ -1,0 +1,4 @@
+interface:
+  display_name: "VBelt Deploy"
+  short_description: "pnpm-Projekt als Vercel-Projekt mit Git-Auto-Deploy veröffentlichen"
+  default_prompt: "Use $vbelt-deploy to publish the current pnpm project as a Vercel project under a slug with Git auto-deploy."

@@ -1,0 +1,26 @@
+{
+  "identity": {
+    "name": "Vorname Nachname",
+    "email": "post@deine-domain.de",
+    "intro_paragraph": "Ich bin selbstständiger Softwareentwickler aus der Region und baue aktuell eine kleine Web- und Softwareagentur auf. Dafür suche ich bewusst einige ausgewählte Unternehmen, mit denen ich persönlich und langfristig zusammenarbeiten kann."
+  },
+  "mail": {
+    "host": "mail.provider.de",
+    "port": 465,
+    "user": null,
+    "bcc": ["post@deine-domain.de"],
+    "password_env": "VBELT_SMTP_PASSWORD",
+    "password_file": "~/.config/vbelt/smtp-password",
+    "keychain_service": "vbelt-smtp"
+  },
+  "deploy": {
+    "github_owner": null,
+    "private_repos": true,
+    "vercel_scope": null,
+    "domain": null
+  },
+  "lead": {
+    "api_base": null,
+    "api_token": null
+  }
+}

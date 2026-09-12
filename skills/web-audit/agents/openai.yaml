@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Audit"
+  short_description: "Performance- und A11y-Audit gegen deployte URLs: Baseline, Fix, Nachmessen"
+  default_prompt: "Nutze $web-audit, um diese deployte URL zu messen, die Findings zu priorisieren, Fixes im Repo umzusetzen und jede Änderung nachzumessen."

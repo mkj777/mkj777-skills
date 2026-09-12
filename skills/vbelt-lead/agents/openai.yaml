@@ -1,0 +1,4 @@
+interface:
+  display_name: "VBelt Lead"
+  short_description: "Lead per Bau-API reservieren, freigeben und als gebaut melden"
+  default_prompt: "Nutze $vbelt-lead, um vor Baubeginn genau einen Lead zu reservieren und ihn nach dem verifizierten Deploy als gebaut zu melden."

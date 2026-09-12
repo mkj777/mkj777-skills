@@ -1,0 +1,4 @@
+interface:
+  display_name: "VBelt Design"
+  short_description: "Design direction: what to notice first, what carries the page, how it moves"
+  default_prompt: "Use $vbelt-design to set the design direction for this site and weight space, typography, imagery and motion accordingly."

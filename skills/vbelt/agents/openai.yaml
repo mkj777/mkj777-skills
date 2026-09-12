@@ -1,0 +1,4 @@
+interface:
+  display_name: "VBelt"
+  short_description: "Baut veraltete Websites neu, als Akquise-Demo oder Vollausbau"
+  default_prompt: "Nutze $vbelt, um aus dieser bestehenden Website eine Akquise-Demo zu bauen, sie zu deployen und die Erstkontakt-Mail an den Inhaber vorzubereiten."

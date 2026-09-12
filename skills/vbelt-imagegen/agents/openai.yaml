@@ -1,0 +1,4 @@
+interface:
+  display_name: "VBelt Imagegen"
+  short_description: "One horizontal reference image per section, in one consistent palette"
+  default_prompt: "Use $vbelt-imagegen to generate one separate horizontal reference image for every section of this page."

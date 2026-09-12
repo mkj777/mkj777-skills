@@ -1,0 +1,4 @@
+interface:
+  display_name: "VBelt Akquise"
+  short_description: "Bauen, veröffentlichen, Inhaber anschreiben, in einem Durchgang"
+  default_prompt: "Nutze $vbelt-akquise, um aus dieser Website eine Demo zu bauen, sie zu veröffentlichen und die Erstkontakt-Mail an den Inhaber vorzubereiten."
