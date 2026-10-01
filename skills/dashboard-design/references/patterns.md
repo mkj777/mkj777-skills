@@ -3,9 +3,8 @@
 Concrete building blocks for the rules in [SKILL.md](../SKILL.md). Each pattern lists what it
 is for, its anatomy, and what agents tend to get wrong.
 
-Visual reference: the "Dashboard Flaws" Figma board (employee table, proposal activity panel,
-incident tracking with chart, onboarding checklist, sharing dialog). Its properties are
-described in the patterns below; the TalentBridge tokens replace its colours.
+How these blocks look is defined in [target-design.md](target-design.md); the project
+tokens come from the project profile.
 
 ## Role overviews
 
@@ -141,7 +140,7 @@ One line of scope, muted
 +--------------------------------------------------------------+
 ```
 
-- One component for every page. Title `text-3xl` semibold, subtext `text-sm` muted, one line.
+- One component for every page. Title 28 px semibold, subtext 14 px muted, one line (type scale in target-design.md).
 - Header and cards share one content width. Forms limit their field width inside the card.
 - Card: `--card` background, 1 px `--border`, `--radius`, padding 24 px (16 px on mobile),
   toolbar padding 12 px 16 px with a separator below. Tables sit edge to edge inside the card.

@@ -1,6 +1,6 @@
 ---
 name: dashboard-design
-description: Rule set for logged-in interfaces of booking systems, job portals and staffing agencies, meaning the applicant dashboard, the client area and the back office. Derives every view from the person using it (role, question, next action, blocker), then enforces hard, checkable rules for the primary action, status, colour, tables, cards, metrics, empty states, forms and detail views. Use this skill for "build a dashboard", "design the back office", "rework the overview", "applicant area", "client portal", "admin UI", "table or cards", "status display", "empty state", "the dashboard feels cluttered", and for every review of such screens. Not for marketing sites or landing pages; that is vbelt-design.
+description: Finds the usability problems in logged-in interfaces of booking systems, job portals and staffing agencies (applicant or customer area, client area, back office) and solves them with a defined target design language. Derives every view from the person using it (role, question, next action, blocker), checks it against hard, checkable rules for the primary action, status, colour, tables, cards, metrics, empty states, forms, detail views and mobile, and delivers findings plus a redesign spec per view. Use this skill for "build a dashboard", "design the back office", "rework the overview", "applicant area", "client portal", "admin UI", "table or cards", "status display", "empty state", "the dashboard feels cluttered", and for every review of such screens. Not for marketing sites or landing pages; that is vbelt-design.
 ---
 
 # Dashboard Design
@@ -14,20 +14,43 @@ Everything that does not serve that question costs them time.
 
 Without rules, agents reliably build the same wrong dashboard: a greeting on top, four
 colourful metric tiles with no context, cards instead of a table, three equally loud buttons,
-status shown as colour only, empty sections at full size, a spinner. This skill prevents that.
+status shown as colour only, empty sections at full size, a spinner. This skill finds those
+problems and replaces them with a better design.
+
+## Files
+
+| File | What it holds |
+|---|---|
+| this file | role card, page shell, hard rules, pre-flight, workflow |
+| [references/target-design.md](references/target-design.md) | the target design language every fix moves towards, desktop and mobile |
+| [references/patterns.md](references/patterns.md) | building blocks: role overviews, status vocabulary, shell, table, row actions, panel, forms |
+| [references/talentbridge.md](references/talentbridge.md) | project profile: tokens, roles, current findings. Other projects get their own profile in the same shape. |
 
 ## Workflow
 
-1. **Write the role card** (section 1) before a single line of UI exists.
-2. **Derive the view**: page anatomy, primary action, presentation form (section 2 and
-   [references/patterns.md](references/patterns.md)).
-3. **Build against the hard rules** (section 3). Take project tokens from the project
-   profile; for TalentBridge that is [references/talentbridge.md](references/talentbridge.md).
-4. **Pre-flight** (section 5) for every view and every role, with real states: empty,
-   partial, full, error, no permission.
+### Mode A: review and redesign (default when screens or a running app exist)
 
-For a review instead of a build: still do step 1, then check every view against sections 3
-and 5 and deliver the findings as a table (rule, location, what the user experiences, fix).
+1. **Role card** (section 1) for every role whose screens are in scope.
+2. **Inventory**: list every view per role, desktop and mobile, with the states that were
+   actually seen (empty, partial, full). Missing states are noted as "not seen", not guessed.
+3. **Findings**: check each view against section 2 (shell) and section 3 (rules). One row per
+   finding in the project profile: id, rule, where, what the user experiences, fix. Write the
+   user experience as the person would say it, not as a design term.
+4. **Redesign spec per view**, in the target design language: a layout sketch (ASCII is fine),
+   what moves where, which pattern replaces what (see "Typical replacements" in
+   target-design.md), the primary action per state, and the mobile variant. Fix the cause
+   across views (one shell, one status map, one button) before fixing single screens.
+5. **Pre-flight** (section 5) against the spec, not against the old screen.
+6. Only when asked: implement, view by view, shared components first (shell, status pill,
+   table, row actions), then the pages.
+
+### Mode B: build a new view
+
+1. Role card. 2. Shell and pattern from patterns.md. 3. Build against section 3 in the target
+design language. 4. Pre-flight with real states.
+
+Fixes always move towards [references/target-design.md](references/target-design.md), never
+towards a new private idea per screen. The reference sets the character; it is not copied 1:1.
 
 ## 1. The role card
 
@@ -142,9 +165,10 @@ Every rule can be checked on the screen. A broken rule is a finding, not a matte
     (see [references/patterns.md](references/patterns.md#status-vocabulary)).
 17. **Status and category look different.** Status: tinted pill with icon. Category
     (industry, location, department): neutral chip, at most one coloured dot.
-18. **Colour is rationed.** The interface is neutral. Brand colour only for the primary action,
-    active navigation, progress and links. Status colours only for status. No colourful tiles,
-    no colour as decoration, no gradients on controls.
+18. **Colour is rationed.** The interface is neutral, ink on paper. The primary button has the
+    one primary colour the profile defines (TalentBridge: ink). The accent colour only marks
+    active navigation, progress, links and focus. Status colours only for status. No
+    colourful tiles, no colour as decoration, no gradients on controls.
 19. **Warning before error.** Missing required fields are a hint before submitting (warn
     tone), and an error only after a failed submit (danger tone). Red is for things that went wrong.
 20. **Done things step back but do not disappear.** Inactive, cancelled, completed records are
@@ -159,8 +183,11 @@ Every rule can be checked on the screen. A broken rule is a finding, not a matte
 22. **The back office is dense.** Row height 40 to 44 px, checkbox for bulk actions, sortable
     columns, filters and sort stored in the URL, tabs and filter chips show their count
     ("Neu 12", "Eingegangen 4"). Default sort is "what has to be handled first" (oldest open first, then deadline), never alphabetical.
-23. **Applicants and clients are mobile first.** Every view works at 360 px width without
-    horizontal scrolling, touch targets at least 44 px, primary action within thumb reach.
+23. **Applicants and clients are mobile first, and nothing breaks on a phone.** Every view,
+    back office included, works at 360 px width without horizontal scrolling, touch targets at
+    least 44 px. Below 768 px tables become row lists (line 1 name and status, line 2 the two
+    deciding attributes), records open as full screen sheets, filter chips scroll in one row,
+    metric tiles never stack full width above the content. A clipped table is a finding.
 24. **One thing per section.** A card or section answers one question. A section with nothing
     to say shrinks to one line or goes away (rule 26).
 
@@ -223,6 +250,13 @@ For every view and every role before it counts as done. Every "no" is a finding.
 10. **Contrast**: Text at least 4.5:1, including muted text on tinted surfaces.
 11. **Shell**: Does the page use the shared shell, with one line of subtext, content inside
     the standard card, same width and spacing as every other page?
+
+## Output of a review
+
+1. Role cards.
+2. Findings table per area in the project profile (shared shell findings first).
+3. Redesign spec per view with desktop and mobile sketch.
+4. A short list of shared components to build first, in order.
 
 ## What this skill does not do
 

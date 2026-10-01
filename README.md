@@ -19,7 +19,7 @@ Eigene Skills für Claude Code und andere Agenten, in einem Repository:
 | [`vbelt-lead/`](skills/vbelt-lead/) | Lead reservieren, freigeben, als gebaut melden | | `vbelt` |
 | [`vbelt-deploy/`](skills/vbelt-deploy/) | als Vercel-Projekt veröffentlichen, Git verbinden, Live-URL prüfen | | `vbelt`, `vbelt-akquise` |
 | [`web-audit/`](skills/web-audit/) | messen, Findings priorisieren, fixen, nachmessen | Chrome-DevTools-MCP, Lighthouse | |
-| [`dashboard-design/`](skills/dashboard-design/) | Dashboards und Backoffice bauen oder reviewen | `dataviz` (nur für Charts) | |
+| [`dashboard-design/`](skills/dashboard-design/) | Dashboard-Probleme finden und mit einer festen Zielsprache neu gestalten | `dataviz` (nur für Charts) | |
 
 `vbelt-imagegen` ist `imagegen-frontend-web` aus dem Taste-Skill von Leonxlnx unter dem
 Namensschema dieses Repos: <https://github.com/Leonxlnx/taste-skill/tree/main/skills/imagegen-frontend-web>

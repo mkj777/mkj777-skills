@@ -77,19 +77,22 @@ Radius: `--radius` 10 px, `--radius-md` 8 px, `--radius-sm` 6 px.
    derive the rest from the `dataviz` skill, or charts will ignore the brand.
 4. **`--sidebar-*` are shadcn defaults** (light grey) while the app sidebar is dark
    `neutral-900`. Either the tokens are unused (remove) or the sidebar is hard coded (fix).
-5. **No decided primary button.** See S1 below.
+5. **No decided primary button.** Decision for the target: ink (`--neutral-900`) solid, as in
+   the Figma reference and most current pages. `--primary` stays brand 600 for links, focus
+   and progress; the button gets its own token (`--button-primary`). See S1.
 
 ## Shell findings (both areas)
 
 | # | Rule | Where | What the user experiences | Fix |
 |---|---|---|---|---|
-| S1 | 3 | everywhere | The primary button is black on some pages ("Stelle anlegen", "Termin anfragen", "Jobs durchsuchen") and a green gradient on others ("Passwort ändern", "Speichern", "Termin anfragen" on the overview card). The user cannot learn what the main button looks like. | One primary: brand 600 solid. No gradient on buttons. Black only for dark surfaces. |
+| S1 | 3 | everywhere | The primary button is black on some pages ("Stelle anlegen", "Termin anfragen", "Jobs durchsuchen") and a green gradient on others ("Passwort ändern", "Speichern", "Termin anfragen" on the overview card). The user cannot learn what the main button looks like. | One primary: ink solid (`--neutral-900`), hover `--neutral-700`. No gradient, no green buttons. Green stays for links, active navigation, progress. |
 | S2 | 6 | sidebar, both areas | "Abmelden" is a text link next to the user name; language is text plus globe. | Log out as an icon button (door icon, `aria-label="Abmelden"`, tooltip). Language as icon button with the code. |
 | S3 | shell | Termine (both), Bewerberdatenbank | Subtext runs to two or three lines explaining how the feature works (blocked accounts, calendar files, video link, price). | One line of scope. The explanation moves into the dialog of the action it explains ("Sperren" confirm, "Termin bestätigen" dialog). |
 | S4 | shell | Termine (both) | Empty state is a dashed box, while other pages use solid cards. | Same card as every other page, empty state inside it. |
 | S5 | shell | Einstellungen, Kundenbereich Termine | Card width differs from page to page (Einstellungen narrower than the tables; divider and accordion on Termine narrower than the header). | One content width from the shell. Forms may limit their field width inside the card, not the card. |
 | S6 | shell | Bewerbungen, Stellen, Bewerberdatenbank | Search and filter chips float between header and card. | Toolbar inside the top of the card. |
 | S7 | never built | everywhere | Test data in every screen ("Test 3009 Pruefer v16", "Stelle 1", "weqwqe"). Layout is judged against wrong lengths. | Realistic seed data on staging. |
+| S8 | target design | everywhere | Table headers, metric labels and job locations are spaced mono capitals ("EINGANG", "NEUE BEWERBUNGEN"); they are harder to read than the data under them. | Sentence case 13 px headers with type icon (target-design.md). Mono only for IDs and codes. |
 
 ## Kundenbereich findings
 
@@ -151,8 +154,30 @@ What already works and stays:
 | B12 | 22 | Bewerbungen, Stellen | Default sort is by date, newest first. The Vermittler needs the oldest unhandled application first. | Default "Eingegangen", oldest first. Navigation shows counts of open items ("Bewerbungen 1", "Termine 0"). |
 | B13 | role overview | Backoffice | There is no landing view; the Vermittler starts in Bewerbungen and has to visit Termine and Kündigungen to see if anything waits there. | Work queue as the first view (patterns.md, back office overview) or counts in the navigation as the minimum. |
 
+## Kündigungen (back office, mobile screenshot)
+
+| # | Rule | Where | What the user experiences | Fix |
+|---|---|---|---|---|
+| B14 | 1 | Kündigungen | Every cancellation card has its own black "In Stripe kündigen" button: four primary buttons on one screen. | List or table with status pill; the action lives in the record panel. Bulk "Als erledigt markieren" for selections. |
+| B15 | 14, 30 | Kündigungen | The same three line sentence ("Ohne Anmeldung erklärt: die Adresse ließ sich keinem angemeldeten Konto zuordnen ...") repeats in every card. | Status pill "Nicht zugeordnet" (warn); the explanation once, in the panel. |
+| B16 | 4, 2 | Kündigungen | The text says "Zuordnen und von Hand beenden", but there is no "Zuordnen" button; only "In Stripe kündigen" and "Erledigt". | The state decides the action: unassigned shows "Konto zuordnen" first, then "In Stripe kündigen" (with external link icon), then "Erledigt". |
+| B17 | 22 | Kündigungen | No filter between open and done, no count, newest first. Cancellations have a legal date; the oldest open one is the most urgent. | Chips "Offen 4", "Erledigt"; default open, oldest first; Eingang date as first column. |
+| B18 | shell | Kündigungen | Subtext is two lines; the legal point (valid on receipt) matters but is hidden in prose. | Subtext "Eingang zählt als Kündigungsdatum." as the one line. |
+
+## Mobile findings (back office, 440 px)
+
+| # | Rule | Where | What the user experiences | Fix |
+|---|---|---|---|---|
+| M1 | 23 | Bewerbungen | Three metric tiles stack full width and push the list below the fold; the first application appears at the bottom of the screen. | Tiles go (B1); chips with counts in one scrollable row. |
+| M2 | 23 | Bewerbungen, Stellen | The desktop table is squeezed: names wrap into four lines, columns are cut off on the right (Kontakt, Status, Bewerber are invisible). The decisive information is the part that is missing. | Row list: line 1 name or title plus status pill, line 2 Stelle and date (Bewerbungen) or Ort and Bewerber count (Stellen). Tap opens a full screen sheet. |
+| M3 | 23 | Bewerbungen, Stellen | Filter chips wrap into two rows above the list. | One horizontally scrollable row. |
+| M4 | 32, 15 | Stellen | URL slugs wrap into two mono lines under each title and make every row three to four lines high. | Slug out of the list (B7). |
+| M5 | 6, S2 | Drawer | "Abmelden" is a small text link in the drawer footer; the drawer has no counts. | Log out icon button; counts next to the items. |
+| M6 | form | Einstellungen | "Mindestens 8 Zeichen" sits next to the button instead of under "Neues Passwort", where it is needed while typing. Button is the green gradient. | Helper text under its field; ink primary (S1). |
+
 ## Open
 
-- Bestandskunden and Kündigungen (back office), Rechnungen and Einstellungen (Kundenbereich):
-  not reviewed yet.
-- Mobile: all findings above are desktop; check the Kundenbereich at 360 px first.
+- Bestandskunden (back office), Rechnungen (Kundenbereich): not reviewed. The screens follow
+  the same shell, so S1 to S8 apply; specific findings only once seen.
+- Kundenbereich on mobile: not seen; expected to share M1 to M5.
+- Redesign specs per view (workflow step 4) are the next deliverable.
