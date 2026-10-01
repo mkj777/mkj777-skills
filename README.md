@@ -1,12 +1,14 @@
 # mkj777-skills
 
-Eigene Skills für Claude Code und andere Agenten, in einem Repository. Zwei Familien:
+Eigene Skills für Claude Code und andere Agenten, in einem Repository:
 
 - **vbelt**: baut aus einer veralteten Unternehmenswebsite eine bessere und veröffentlicht sie
   über Vercel mit Git-Auto-Deploy. Die Vercel-Fassung der web-belt-Kette; beide können
   nebeneinander installiert sein, die Namen und Trigger sind getrennt.
 - **web-audit**: Performance- und Barrierefreiheits-Audit gegen deployte URLs mit Baseline,
   Fix-Loop und Nachmessen.
+- **dashboard-design**: Regelwerk für eingeloggte Oberflächen von Buchungssystemen und
+  Jobportalen (Bewerber, Kunde, Backoffice), abgeleitet aus der Person, die sie benutzt.
 
 | Skill | Zweck | Ruft auf | Wird aufgerufen von |
 |---|---|---|---|
@@ -17,6 +19,7 @@ Eigene Skills für Claude Code und andere Agenten, in einem Repository. Zwei Fam
 | [`vbelt-lead/`](skills/vbelt-lead/) | Lead reservieren, freigeben, als gebaut melden | | `vbelt` |
 | [`vbelt-deploy/`](skills/vbelt-deploy/) | als Vercel-Projekt veröffentlichen, Git verbinden, Live-URL prüfen | | `vbelt`, `vbelt-akquise` |
 | [`web-audit/`](skills/web-audit/) | messen, Findings priorisieren, fixen, nachmessen | Chrome-DevTools-MCP, Lighthouse | |
+| [`dashboard-design/`](skills/dashboard-design/) | Dashboards und Backoffice bauen oder reviewen | `dataviz` (nur für Charts) | |
 
 `vbelt-imagegen` ist `imagegen-frontend-web` aus dem Taste-Skill von Leonxlnx unter dem
 Namensschema dieses Repos: <https://github.com/Leonxlnx/taste-skill/tree/main/skills/imagegen-frontend-web>

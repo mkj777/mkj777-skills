@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dashboard Design"
+  short_description: "Rules for applicant, client and back office dashboards, derived from the person using them"
+  default_prompt: "Use $dashboard-design to write the role card for this view, then build or review it against the hard rules and the pre-flight check."
