@@ -1,4 +1,4 @@
 interface:
   display_name: "Dashboard Design"
-  short_description: "Find dashboard UX problems and redesign them towards a defined target design language"
-  default_prompt: "Use $dashboard-design to write the role cards, review these screens against the hard rules, and deliver findings plus a redesign spec per view in the target design language."
+  short_description: "Measurable design principles for dashboards, back offices and customer portals, applied to any project's tokens"
+  default_prompt: "Use $dashboard-design to map this project's tokens into a design profile, write the role cards, then review or build the views against the hard rules and the pre-flight."

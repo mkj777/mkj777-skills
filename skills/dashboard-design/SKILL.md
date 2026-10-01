@@ -1,268 +1,285 @@
 ---
 name: dashboard-design
-description: Finds the usability problems in logged-in interfaces of booking systems, job portals and staffing agencies (applicant or customer area, client area, back office) and solves them with a defined target design language. Derives every view from the person using it (role, question, next action, blocker), checks it against hard, checkable rules for the primary action, status, colour, tables, cards, metrics, empty states, forms, detail views and mobile, and delivers findings plus a redesign spec per view. Use this skill for "build a dashboard", "design the back office", "rework the overview", "applicant area", "client portal", "admin UI", "table or cards", "status display", "empty state", "the dashboard feels cluttered", and for every review of such screens. Not for marketing sites or landing pages; that is vbelt-design.
+description: Design principles for logged-in product interfaces such as dashboards, back offices, admin areas, customer portals, booking systems and job portals. Treats the UI from the side of the person using it, then holds every screen to measurable rules for spacing, type, colour, contrast, icons, placement, components, states and mobile. Works on any project by mapping the project's own tokens onto the rule set first. Use this skill to build a new dashboard view, to review existing screens and redesign them, to set up a design system for a logged-in area, or when a dashboard, admin panel, internal tool, settings page or data table feels cluttered, inconsistent, hard to scan or broken on mobile; also for UI audits of such screens. Not for marketing pages or landing pages; detailed chart styling goes to a dataviz skill if one is installed.
 ---
 
 # Dashboard Design
 
 > **Treat the UI like the person using it, not the designer designing it.**
 
-A dashboard is not looked at, it is used: daily, under time pressure, often on a phone. The
-person arrives with a question ("Can I apply yet?", "Who is missing from tomorrow's shift?",
-"Which applications are waiting for me?") and wants to leave with an answer and an action.
-Everything that does not serve that question costs them time.
+A dashboard is not looked at, it is used: often daily, under time pressure, sometimes on a
+phone. The person arrives with a question and wants to leave with an answer and an action.
+Everything on the screen either serves that question or costs them time.
 
-Without rules, agents reliably build the same wrong dashboard: a greeting on top, four
-colourful metric tiles with no context, cards instead of a table, three equally loud buttons,
-status shown as colour only, empty sections at full size, a spinner. This skill finds those
-problems and replaces them with a better design.
+The rules in this skill are generalized from measured reference designs (light and dark data
+apps), from audits of real products, and from before and after comparisons. They describe a
+character, not a look: **a quiet, neutral work surface where only data, state and the one next
+action carry weight.** Brand, fonts and colours come from the project; the rules decide how they
+are used.
 
 ## Files
 
-| File | What it holds |
+| File | Use it for |
 |---|---|
-| this file | role card, page shell, hard rules, pre-flight, workflow |
-| [references/target-design.md](references/target-design.md) | the target design language every fix moves towards, desktop and mobile |
-| [references/patterns.md](references/patterns.md) | building blocks: role overviews, status vocabulary, shell, table, row actions, panel, forms |
-| [references/talentbridge.md](references/talentbridge.md) | project profile: tokens, roles, current findings. Other projects get their own profile in the same shape. |
+| this file | principle, workflow, the hard rules, pre-flight |
+| [references/visual-system.md](references/visual-system.md) | measured values and ratios: spacing, type, colour roles, contrast, icons, layout, light and dark |
+| [references/components.md](references/components.md) | anatomy of every recurring component, desktop and mobile |
+| [references/anti-patterns.md](references/anti-patterns.md) | what typically goes wrong, why it hurts the user, and the fix |
+| [references/project-profile.md](references/project-profile.md) | template that maps a project's tokens and roles onto this skill |
+| [scripts/contrast.py](scripts/contrast.py) | WCAG contrast for colour pairs, with alpha and gradient stops |
 
 ## Workflow
 
-### Mode A: review and redesign (default when screens or a running app exist)
+### Step 0: project profile (once per project)
 
-1. **Role card** (section 1) for every role whose screens are in scope.
-2. **Inventory**: list every view per role, desktop and mobile, with the states that were
-   actually seen (empty, partial, full). Missing states are noted as "not seen", not guessed.
-3. **Findings**: check each view against section 2 (shell) and section 3 (rules). One row per
-   finding in the project profile: id, rule, where, what the user experiences, fix. Write the
-   user experience as the person would say it, not as a design term.
-4. **Redesign spec per view**, in the target design language: a layout sketch (ASCII is fine),
-   what moves where, which pattern replaces what (see "Typical replacements" in
-   target-design.md), the primary action per state, and the mobile variant. Fix the cause
-   across views (one shell, one status map, one button) before fixing single screens.
-5. **Pre-flight** (section 5) against the spec, not against the old screen.
-6. Only when asked: implement, view by view, shared components first (shell, status pill,
-   table, row actions), then the pages.
+Before judging or building anything, fill in [references/project-profile.md](references/project-profile.md)
+from the project's CSS, Tailwind config or design tokens: map every token onto a role
+(surfaces, text levels, border, accent, semantic colours, primary button), run
+`scripts/contrast.py` on every text and surface pair, and record the gaps. Store the profile in
+the project (for example `docs/design-profile.md`), never in this skill.
 
-### Mode B: build a new view
+- **Quick task** (one view, one fix): fill only sections 1 and 3 of the profile.
+- **No tokens yet** (new design system): take the defaults from visual-system.md, record them
+  as the profile, and build the tokens from it.
 
-1. Role card. 2. Shell and pattern from patterns.md. 3. Build against section 3 in the target
-design language. 4. Pre-flight with real states.
+### Step 1: role card
 
-Fixes always move towards [references/target-design.md](references/target-design.md), never
-towards a new private idea per screen. The reference sets the character; it is not copied 1:1.
+For every role that sees the view, four lines. Nothing gets built or judged without them.
 
-## 1. The role card
+| Field | Question |
+|---|---|
+| **Question** | What does the person want to know when they open this view? |
+| **Next action** | What should they have done when they leave? |
+| **Blocker** | What stops them right now (missing data, waiting on someone, no permission)? |
+| **Rhythm and device** | How often, how long, on what device? |
 
-Four lines for every role that sees the view. Nothing gets built without this card.
+Consequences: the primary action is the next action, or resolving the blocker if there is one.
+The first screen answers the question. Rhythm sets density: daily and long means dense tables
+and keyboard use; rare and short means guided and mobile first.
 
-| Field | Question | Example applicant | Example back office |
-|---|---|---|---|
-| **Question** | What question does the person open the page with? | "Can I apply, and where do my applications stand?" | "What is waiting for me today?" |
-| **Next action** | What should they have done afterwards? | Finish the profile, then apply | Screen new applications, confirm appointments |
-| **Blocker** | What is stopping them right now? | 10 required fields missing | nothing, or: client has not confirmed a booking |
-| **Rhythm and device** | How often, how long, on what? | a few times, briefly, mostly phone | daily, for hours, desktop |
+### Step 2a: review and redesign (existing screens)
 
-What follows directly:
+1. Inventory every view per role, desktop and mobile, with the states actually seen.
+2. Check each view against the hard rules below and [references/anti-patterns.md](references/anti-patterns.md).
+   Write each finding as: rule, where, what the person experiences (in their words), fix.
+3. Fix causes before symptoms: shared shell, tokens, button, status pill and table first, then
+   single pages.
+4. Write a redesign spec per view: layout sketch, what moves where, primary action per state,
+   mobile variant. Use the anatomies in [references/components.md](references/components.md).
+5. Pre-flight against the spec.
 
-- The **primary action** of the view is the next action. If there is a blocker, the primary
-  action is resolving the blocker, not the underlying wish.
-- The **first screen** answers the question. Greeting, marketing and explanations come after,
-  or not at all.
-- **Rhythm sets density.** Daily and long (back office) means dense, tabular, keyboard
-  driven. Rare and short (applicant, client) means guided, mobile first, one thing per screen.
+### Step 2b: build a new view
 
-The three roles of a booking and job portal and what their overview shows are in
-[references/patterns.md](references/patterns.md#role-overviews).
+Role card, shell, components from components.md, values from visual-system.md mapped through
+the project profile, then pre-flight with real states (empty, partial, full, loading, error,
+no permission) and realistic data including one extra long value.
 
-## 2. Page shell
+## Hard rules
 
-Every page is built from the same three parts, in the same order, with the same measurements.
-Know one page, know them all. The shell is one component (`<PageShell>` or similar), never
-rebuilt per page.
+Every rule can be checked on a screenshot or in code. A broken rule is a finding, not taste.
+Numbers are defaults from the references; the project profile may move them within the stated
+range, never outside it.
 
-```
-Header      Title                                         [Primary action]
-Subtext     One line, muted
-            (gap 24 px)
-Card        [Toolbar: tabs or filters left, tools right]
-            Content: table, list, form, checklist or empty state
-```
+### Shell and placement (values: visual-system.md sections 1 and 6)
 
-1. **Header**: title says what is here, ideally as a number or state ("13 offene Stellen",
-   "4 Bewerbungen warten"). The primary action sits on the title line at the far right, on
-   every page in the same place. Active navigation item marks the location; breadcrumb only on
-   deeper levels.
-2. **Subtext**: exactly one line, muted, at most about 80 characters. It states the scope or
-   the current filter ("Alle Standorte, letzte 30 Tage"), not how the feature works. Anything
-   longer belongs in a "Mehr erfahren" popover or in the dialog of the action it explains.
-   No subtext is better than a filler subtext ("Dein Konto im Backoffice.").
-3. **Card**: all content lives in cards that look identical everywhere: same background,
-   border, radius, padding, same width as the header. Filters and tabs sit inside the top of
-   the card, not floating between header and card. Several cards stack with one fixed gap.
-   An empty state is the same card with the empty state inside, not a different dashed box.
-4. **Details** open as a side panel over the card as long as the person keeps working in the
-   list afterwards. A separate page only when editing takes longer than a glance.
+1. **One shell for every page:** header (title left, one primary action right on the title row),
+   one line of subtext, a fixed gap of 24 to 40, then content in cards. Same gutter, same header
+   gap, same card padding, same content width on every page. Built once as a component.
+2. **One left edge.** Title, subtext, toolbar, cards and table start on the same x; the primary
+   button's right edge equals the content's right edge.
+3. **Two content widths at most:** full width for lists and tables, one readable max width for
+   forms and text. Never both in one column.
+4. **The title is the navigation label** and the breadcrumb's current item; it may carry a
+   count ("Open jobs 13", "Bookings today 8"). States and greetings go into the subtext or the
+   first card. Active navigation is shown with at least two signals (text level plus icon or
+   marker).
+5. **Toolbar inside the card it controls:** tabs or filter chips left, icon tools right (sort,
+   filter, group, search, view), all controls one height.
+6. **Navigation is grouped**, each item with an icon, groups under small labels. Account,
+   settings, language and help live in one account area at the bottom of the sidebar. Sign out
+   is an icon button with tooltip next to the account, or an icon plus label item in its menu,
+   never a loose text link. Legal links go into that menu, not into a footer on every app page,
+   unless law requires them to stay permanently visible (imprint, cancellation button).
 
-Nothing goes between subtext and the first card except a single metric row that passes rule 13.
+### Action (values: components.md)
 
-## 3. Hard rules
+7. **Exactly one solid primary button per view.** Other cards use outline buttons or links.
+   Exception: peer cards side by side (plans, options), where only the recommended one is
+   solid. Alternatives next to a primary are outline, exits are text links.
+8. **The primary action follows the state.** When a blocker exists, the primary action resolves
+   it. When the state changes, the action changes in the same place.
+9. **One primary button style across the product.** Achromatic: near black on light, raised
+   neutral on dark. Never the accent, never a gradient. Same label means same component.
+10. **Buttons name the outcome** as verb plus object ("Save changes", "Invite member",
+    "Confirm appointment"), never "Submit", "OK" or "Here".
+11. **The action sits right after the value it commits to** (price, summary, last field), never
+    pinned to a card's bottom with empty space above it.
+12. **Row actions:** at most one inline action per row; the rest in a trailing overflow menu and
+    in the detail view. Destructive actions are never inline and never in the status cell.
+    Reversible actions run at once and offer undo in a toast; irreversible ones confirm with
+    the object and the consequence named.
+13. **Icon-only buttons only for known tools and meta actions** (sort, filter, search, view,
+    close, copy, more, sign out), always with an accessible name and tooltip. Creating,
+    sharing, inviting and paying are always labelled.
+14. **Nothing covers content.** Sticky bars reserve their height; no floating button sits over
+    a control.
 
-Every rule can be checked on the screen. A broken rule is a finding, not a matter of taste.
+### Information (values: components.md)
 
-### Action
+15. **Each fact once per screen.** One full statement where the decision happens, at most one
+    compact pointer elsewhere (a count, a dot).
+16. **Subtext states scope, not process:** one line ("All locations, last 30 days"). How a
+    feature works goes into the dialog or popover of the action it explains.
+17. **No metric on its own.** A number has a label, a period or comparison, and leads to the
+    filtered list behind it. A metric must belong to the page it sits on. If it counts the same
+    thing as a filter, it becomes the filter's count.
+18. **A field has one meaning.** Missing values say so in muted text ("not set"), never blank,
+    never a lone dash, never another value moved into the slot.
+19. **Columns earn their place.** A column that shows the same value in every row is hidden
+    or shows only exceptions. One value per cell; secondary values go to the detail view.
+20. **Implementation details stay out of lists** (slugs, database IDs, enum names). They go to
+    the detail view with a copy button if anyone needs them. References people use (invoice,
+    booking or order numbers) stay, in mono.
+21. **Explain once, not per item.** A sentence repeated in every list item becomes a status pill
+    in the item and one explanation in the panel or above the list.
 
-1. **Exactly one primary action per view.** Visible as the only filled button in the primary
-   colour. Everything else is secondary (outline or ghost) or a text link.
-2. **The primary action follows the state.** Profile incomplete: "Profil vervollständigen",
-   not "Jobs durchsuchen". No open application: "Stellen ansehen". When the state changes,
-   the action changes in the same place.
-3. **One primary colour across the product.** Same label means same component, same colour,
-   same size. The same button once black and once green is a finding.
-4. **Actions are named after what happens**, as a verb: "Lebenslauf hochladen", not "Weiter"
-   or "Hier". The same thing has the same word everywhere.
-5. **Nothing covers content.** Floating save buttons and sticky bars reserve their height as
-   padding at the end of the page. No element hides another control.
-6. **Meta actions are icon buttons, content actions are words.** Log out, language, help,
-   close, more, settings of a table: icon button with `aria-label` and tooltip, 36 to 40 px hit
-   area. Actions on the content itself ("Stelle anlegen", "Termin bestätigen") stay labelled
-   buttons. A text link "Abmelden" next to the user name is a finding.
-7. **Row actions live in one overflow menu.** A table row carries at most one inline action
-   (the one done most often); everything else goes into a "more" icon button at the row end
-   and into the side panel. Destructive actions ("Sperren", "Löschen", "Schließen") are never
-   inline in the row and always confirm, saying what will happen.
+### Type (values: visual-system.md section 2)
 
-### Information
+22. **At most six sizes per screen.** Page title about 1.85x body, card title 1.15 to 1.3x,
+    meta 0.85 to 0.92x, metric number 2 to 2.4x its label. Same size hierarchy comes from
+    weight and colour, not new sizes.
+23. **Sentence case sans for labels, headers, tabs and buttons.** Spaced uppercase only for
+    navigation group labels. Mono only for copyable machine identifiers and code; numbers use
+    `tabular-nums` in the sans font.
+24. **Minimum sizes:** 12 px for meta (11 px only for uppercase navigation group labels),
+    14 px body on mobile, 13 to 14 px body on desktop.
+25. **Values never break mid word.** Emails, IDs and URLs truncate with ellipsis and show in
+    full on hover and in the detail view.
 
-8. **Every piece of information has one source.** A value (progress, price, missing fields)
-   appears in full in one place and at most once more as a compact pointer that leads there.
-   The same progress three times is two times too many.
-9. **A data field has a fixed meaning.** If the wage is missing, the slot says
-   "Lohn auf Anfrage", not the start date as a stand-in. Missing values read "nicht angegeben"
-   in muted colour, never blank, never a lone hyphen.
-10. **The comparison attribute is readable.** Whatever the person decides on (location, wage,
-   date, status) is set at body size and full contrast, never only as a small caps eyebrow.
-11. **Numbers are data.** `font-variant-numeric: tabular-nums`, right aligned in tables, with a
-   unit, German format (`14,50 €/Std`, `01.10.2026`). IDs and codes in mono.
-12. **Time twice where it matters.** In timelines and activity both absolute and relative
-    ("Heute, 14:13 · vor 4 Stunden"). Deadlines as time left plus date ("noch 2 Tage, bis 03.10.").
-13. **No metric on its own.** Every number has a label, a reference period or comparison, and a
-    click target that opens the filtered list behind it. A number without an action is decoration.
-    A metric belongs to the page it sits on ("Aktive Abos" does not belong on Bewerbungen),
-    and a metric that counts the same thing as a filter chip is replaced by the chip's count.
-14. **A column that never varies is noise.** If every row says "Aktiv" or shows a dash, the
-    column shows only the exceptions ("Gesperrt", "Unbestätigt") and stays empty otherwise,
-    or goes away. The same holds for repeated words in a cell: "2", not "2 Bewerbungen" in a
-    column titled "Bewerber".
-15. **One line per value.** Emails, IDs and URLs never wrap mid-word; they truncate with
-    ellipsis and show in full on hover and in the panel. A row has one main line and at most
-    one muted meta line.
+### Colour and contrast (values: visual-system.md sections 3 and 4)
 
-### Status and colour
+26. **Colour roles, not colours:** neutrals for the interface, one accent for selection,
+    progress, focus and inline links, a semantic set for status, one hue per chart series,
+    small categorical dots. The accent may double as the info hue and as chart series 1; no other
+    hue is shared between two systems on one screen.
+27. **All text at least 4.5:1 on the surface it sits on** (the card, not only the page). Three
+    levels that step visibly: primary about 12:1 or more, secondary about 7:1, muted 4.5 to
+    5.5:1.
+28. **Status is icon plus word plus tone.** Pill text at least 4.5:1 on its tint. Red only for
+    something that went wrong; inactive, expired, cancelled and rejected are neutral.
+29. **Non text contrast:** input borders and meaningful icons at least 3:1 (3 to 4.5:1 for
+    inputs, so empty fields do not shout). Layout hairlines may be about 1.2:1. Every stop of
+    any gradient that carries text is checked; better, no gradient behind text.
+30. **Brand colour is not decoration.** Not on eyebrows, captions or time windows. When the
+    brand colour equals a semantic hue (green and success, red and danger), using it as
+    decoration makes captions read as status.
 
-16. **Status is icon plus word plus tone colour.** Colour is never the only carrier. Every
-    state lives in the project's central status vocabulary with exactly one rendering
-    (see [references/patterns.md](references/patterns.md#status-vocabulary)).
-17. **Status and category look different.** Status: tinted pill with icon. Category
-    (industry, location, department): neutral chip, at most one coloured dot.
-18. **Colour is rationed.** The interface is neutral, ink on paper. The primary button has the
-    one primary colour the profile defines (TalentBridge: ink). The accent colour only marks
-    active navigation, progress, links and focus. Status colours only for status. No
-    colourful tiles, no colour as decoration, no gradients on controls.
-19. **Warning before error.** Missing required fields are a hint before submitting (warn
-    tone), and an error only after a failed submit (danger tone). Red is for things that went wrong.
-20. **Done things step back but do not disappear.** Inactive, cancelled, completed records are
-    muted across the whole row, stay visible and can be hidden by filter. Only the status
-    carries colour.
+### Icons (values: visual-system.md section 5)
 
-### Presentation
+31. **One outline icon family**, stroke 1.5 px at 16 px, placed next to 13 to 14 px text and
+    coloured like its text. Filled shapes only for status. In labelled buttons the icon leads.
+    Every column header and navigation item may carry a type icon; icons never replace a value
+    the person needs to read.
 
-21. **Table before cards.** More than six objects of the same kind that get compared
-    (applicants, bookings, jobs in the back office, invoices) are a table or a dense list.
-    Cards only for few, dissimilar or image driven objects.
-22. **The back office is dense.** Row height 40 to 44 px, checkbox for bulk actions, sortable
-    columns, filters and sort stored in the URL, tabs and filter chips show their count
-    ("Neu 12", "Eingegangen 4"). Default sort is "what has to be handled first" (oldest open first, then deadline), never alphabetical.
-23. **Applicants and clients are mobile first, and nothing breaks on a phone.** Every view,
-    back office included, works at 360 px width without horizontal scrolling, touch targets at
-    least 44 px. Below 768 px tables become row lists (line 1 name and status, line 2 the two
-    deciding attributes), records open as full screen sheets, filter chips scroll in one row,
-    metric tiles never stack full width above the content. A clipped table is a finding.
-24. **One thing per section.** A card or section answers one question. A section with nothing
-    to say shrinks to one line or goes away (rule 26).
+### Spacing and density (values: visual-system.md section 1)
+
+32. **One 4 px based scale** (4, 8, 12, 16, 24, 32, 40, 48, 64), three tiers in use: related
+    4 to 8, items 12 to 16, groups 2.5 to 3.5 times the item gap (32 to 56). A label is closer
+    to its own field than to the previous one.
+33. **One gap per relationship**, the same horizontally and vertically; one card padding per
+    product (16 or 24); page gutter 32 to 64 on desktop and 16 on mobile, always larger than
+    the card padding.
+34. **Dense rows are 2.5 to 3.3 times the body size** (36 to 44 px), single line; rich list rows
+    have one main line and one muted meta line. More than six comparable items are a table or
+    list, not cards.
 
 ### States
 
-25. **Loading shows the shape.** Skeletons in the real layout, no centred spinner. The skeleton
-    appears after 300 ms without data, not before (no flicker).
-26. **Empty explains why and what now.** Every empty state names the reason and an action. If
-    the reason is a blocker, name the blocker ("Bewerben kannst du, sobald dein Profil
-    vollständig ist. Noch 10 Angaben."). Empty secondary sections are one line, not a full card.
-27. **Errors say what happened and what now.** No technical messages, no codes without text.
-    Input is preserved. Retry is a button, not an instruction.
-28. **Saving is visible.** Forms show their state: "Nicht gespeichert", "Speichert ...",
-    "Gespeichert vor 2 Min". Leaving with unsaved changes asks first.
-29. **Progress with remainder.** Checklists show "4 von 6 erledigt" plus a bar, open items with
-    their own action per row, done items checked and muted.
+35. **Loading is a skeleton in the shape of the page**, shown after about 300 ms, never a
+    centred spinner.
+36. **Empty states live in the same card** as the content, name the reason (including a
+    blocker) and offer one action. No dashed boxes. Empty secondary sections shrink to one line.
+    "No results" for a search or filter differs from "no data yet" and offers "Clear filters".
+37. **Errors say what happened and what now,** keep the input, and offer retry as a button.
+38. **Forms:** every input has a visible label that stays while typing; placeholders show
+    format only, never realistic sample data; helper and error text sit 4 to 10 px under their
+    field; missing required fields are a warning before submit and an error only after.
+    One choice out of more than six options is a select or radio list, not a wall of chips.
+    Save state is visible.
+39. **Limits are honest:** usage shows used and limit with an indicator; at the limit is a
+    warning, not success; "not included" is said in words, not "0 / 0". Feature lists use one
+    marker per row, and excluded items say so in text, not only with a dash.
 
-### Tone
+### Mobile
 
-30. **No marketing in the logged-in area.** Explanations are one sentence at most, the rest
-    behind "Mehr erfahren" or on the public site. A price appears in one place.
-31. **Greeting only with content.** "Hallo Max" on its own is not information. If there is a
-    greeting, it carries the state: "Hallo Max, noch 10 Angaben bis zur ersten Bewerbung."
-32. **The person's language.** Applicants are addressed informally if the product does,
-    the back office is terse and professional. No internal terms (table names, enum values)
-    in the interface, and no technical details nobody acts on in the main view (URL slugs,
-    database IDs, internal flags). They go into the side panel, if anywhere.
+40. **Nothing is clipped.** Below 768 px tables become row lists (line 1 name plus status,
+    line 2 the two deciding attributes), records open as full screen sheets with their actions,
+    filter chips scroll in one row, metric tiles never stack full width before the content,
+    touch targets are at least 44 px, and the primary action stays on the title row.
+41. **Between phone and desktop** (about 768 to 1200 px): the sidebar collapses to an icon rail
+    or drawer below about 1024, the side panel becomes an overlay, wide tables scroll
+    horizontally with a sticky first column and a visible scroll hint.
 
-## 4. Never built
+### Weight
 
-- Four metric tiles in four colours as the entry point, without click target or comparison.
-- Charts nobody needs for a decision. A chart needs a question it answers; then the `dataviz`
-  skill applies.
-- Metric tiles above a table that repeat the counts of the filter chips below them.
-- A stack of two or more buttons in every table row.
-- Two filled buttons side by side. Two dark "feature" cards competing for attention.
-- A spinner in the middle of the page.
-- Tables with truncated content where the full value cannot be read via tooltip or panel.
-- Modal dialogs for content that should be read next to the list.
-- Placeholder data in screens under review ("Stelle 1", "test", "asdf"). Seed data is
-  realistic, otherwise the layout is tested against the wrong lengths.
+42. **Weight is a budget.** The deciding value and the one action carry the most weight on a
+    screen; promotions, upsells and help sit below the task at the lowest weight that still
+    passes contrast (visual-system.md section 8).
 
-## 5. Pre-flight
+### Behaviour
 
-For every view and every role before it counts as done. Every "no" is a finding.
+43. **Focus and keyboard:** a visible focus ring (accent, at least 3:1, 2 px offset) on every
+    interactive element including table rows; Escape closes the topmost layer; views used daily
+    get keyboard shortcuts for search and the primary action.
+44. **Feedback:** toasts confirm background results and offer undo; they never carry the only
+    copy of an error and never cover the primary action.
+45. **Lists at scale:** total count visible, sticky table header, pagination or "Load more"
+    beyond about 100 rows, filters and sort kept in the URL.
 
-1. **Five second test**: Does the first screen answer the question from the role card
-   without scrolling?
-2. **One primary action**: Is there exactly one filled primary button, and is it the next
-   action or the blocker fix?
-3. **Consistency**: Do identical actions have the same label, colour and shape everywhere?
-4. **Status without colour**: Is every status still readable in greyscale (icon and word)?
-5. **Duplicate sources**: Does any value appear more than twice on the screen?
-6. **States**: Are empty, partial, full, loading, error and "no permission" built and looked
-   at, with realistic data and one extra long name?
-7. **Mobile** (applicant, client): 360 px, no horizontal scrolling, nothing covered.
-8. **Density** (back office): Do 15 rows fit on a 900 px tall screen? Is the default sort
-   "urgent first"? Does any column show the same value in every row?
-9. **Keyboard**: Is everything reachable by Tab in a sensible order, with visible focus?
-10. **Contrast**: Text at least 4.5:1, including muted text on tinted surfaces.
-11. **Shell**: Does the page use the shared shell, with one line of subtext, content inside
-    the standard card, same width and spacing as every other page?
+### Time, data and access
+
+46. **Dates and time:** relative time only under seven days, with the absolute value on hover;
+    absolute date plus time zone wherever people or resources sit in different zones
+    (bookings, shifts, appointments). Formats come from the locale formatter.
+47. **Freshness:** data that is synced or cached shows "Updated 5 min ago" and a refresh control.
+48. **Access:** hide what a role can never do; disable with a stated reason what another role,
+    plan or state unlocks; a no access page says who grants access.
+
+### Language
+
+49. **Text grows.** Allow 30 to 40 percent growth for translations; buttons, tabs and pills never
+    have fixed widths; set `lang` and `hyphens: auto` so long compound words break correctly;
+    numbers, currency and dates go through the locale formatter.
+
+## Pre-flight
+
+For every view and role. Each "no" is a finding.
+
+1. Does the first screen answer the role card question without scrolling, on desktop and phone?
+2. Is there exactly one solid primary button, and is it the next action or the blocker fix?
+3. Does the page use the shared shell with the same edges, widths and gaps as its siblings?
+4. In greyscale, can every status still be read (icon and word)?
+5. Does any fact appear more than twice, or any sentence repeat per item?
+6. Does any column show the same value in every row?
+7. Do all text levels pass on the surface they sit on (`scripts/contrast.py`)?
+8. Are there more than six type sizes, any uppercase outside nav group labels, any mono
+   outside identifiers and references?
+9. Are empty, loading, error and no permission states built and seen with realistic data?
+10. At 360 px: nothing clipped, nothing covered, no table squeezed?
+11. Keyboard: everything reachable in order, focus visible, Escape closes layers?
+12. At 1024 px: sidebar, panel and tables still usable?
+13. With text 40 percent longer (translation, long names): nothing truncates that matters?
 
 ## Output of a review
 
-1. Role cards.
-2. Findings table per area in the project profile (shared shell findings first).
-3. Redesign spec per view with desktop and mobile sketch.
-4. A short list of shared components to build first, in order.
+1. Project profile (or the gaps found in the existing one).
+2. Role cards.
+3. Findings table, shared shell findings first.
+4. Redesign spec per view, desktop and mobile.
+5. Order of implementation: tokens, shell, shared components, pages.
 
-## What this skill does not do
+## Not in scope
 
-- No marketing pages, no hero, no landing page. That is `vbelt-design`.
-- No detailed chart design. That is `dataviz`; this skill only decides whether a chart is
-  needed at all.
-- No brand development. Colours and fonts come from the project profile; if there is none, it
-  is first created from the project's CSS (template:
-  [references/talentbridge.md](references/talentbridge.md)).
+Marketing pages, heroes, landing pages, brand development and detailed chart design. When a
+chart is needed, this skill only decides whether it earns its place and keeps it to one hue
+per series.

@@ -7,8 +7,8 @@ Eigene Skills für Claude Code und andere Agenten, in einem Repository:
   nebeneinander installiert sein, die Namen und Trigger sind getrennt.
 - **web-audit**: Performance- und Barrierefreiheits-Audit gegen deployte URLs mit Baseline,
   Fix-Loop und Nachmessen.
-- **dashboard-design**: Regelwerk für eingeloggte Oberflächen von Buchungssystemen und
-  Jobportalen (Bewerber, Kunde, Backoffice), abgeleitet aus der Person, die sie benutzt.
+- **dashboard-design**: messbare Designprinzipien für eingeloggte Oberflächen (Dashboards,
+  Backoffices, Kundenportale), auf die Tokens jedes Projekts anwendbar.
 
 | Skill | Zweck | Ruft auf | Wird aufgerufen von |
 |---|---|---|---|
@@ -19,7 +19,7 @@ Eigene Skills für Claude Code und andere Agenten, in einem Repository:
 | [`vbelt-lead/`](skills/vbelt-lead/) | Lead reservieren, freigeben, als gebaut melden | | `vbelt` |
 | [`vbelt-deploy/`](skills/vbelt-deploy/) | als Vercel-Projekt veröffentlichen, Git verbinden, Live-URL prüfen | | `vbelt`, `vbelt-akquise` |
 | [`web-audit/`](skills/web-audit/) | messen, Findings priorisieren, fixen, nachmessen | Chrome-DevTools-MCP, Lighthouse | |
-| [`dashboard-design/`](skills/dashboard-design/) | Dashboard-Probleme finden und mit einer festen Zielsprache neu gestalten | `dataviz` (nur für Charts) | |
+| [`dashboard-design/`](skills/dashboard-design/) | Dashboards nach festen Prinzipien bauen oder reviewen, projektunabhängig | `dataviz` (nur für Charts) | |
 
 `vbelt-imagegen` ist `imagegen-frontend-web` aus dem Taste-Skill von Leonxlnx unter dem
 Namensschema dieses Repos: <https://github.com/Leonxlnx/taste-skill/tree/main/skills/imagegen-frontend-web>
