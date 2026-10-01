@@ -52,18 +52,36 @@ What follows directly:
 The three roles of a booking and job portal and what their overview shows are in
 [references/patterns.md](references/patterns.md#role-overviews).
 
-## 2. Page anatomy
+## 2. Page shell
 
-Every view has the same order. Know one page, know them all.
+Every page is built from the same three parts, in the same order, with the same measurements.
+Know one page, know them all. The shell is one component (`<PageShell>` or similar), never
+rebuilt per page.
 
-1. **Location**: active navigation item, breadcrumb on deeper levels.
-2. **Title**: says what is here, ideally as a number or state ("13 offene Stellen",
-   "4 Bewerbungen warten"). At most one line of description below it.
-3. **Action row**: tabs or filters on the left, tools on the right (search, sort, view),
-   exactly one primary action at the far right.
-4. **Work surface**: the list, table, form or checklist.
-5. **Details** open as a side panel over the work surface as long as the person keeps
-   working in the list afterwards. A separate page only when editing takes longer than a glance.
+```
+Header      Title                                         [Primary action]
+Subtext     One line, muted
+            (gap 24 px)
+Card        [Toolbar: tabs or filters left, tools right]
+            Content: table, list, form, checklist or empty state
+```
+
+1. **Header**: title says what is here, ideally as a number or state ("13 offene Stellen",
+   "4 Bewerbungen warten"). The primary action sits on the title line at the far right, on
+   every page in the same place. Active navigation item marks the location; breadcrumb only on
+   deeper levels.
+2. **Subtext**: exactly one line, muted, at most about 80 characters. It states the scope or
+   the current filter ("Alle Standorte, letzte 30 Tage"), not how the feature works. Anything
+   longer belongs in a "Mehr erfahren" popover or in the dialog of the action it explains.
+   No subtext is better than a filler subtext ("Dein Konto im Backoffice.").
+3. **Card**: all content lives in cards that look identical everywhere: same background,
+   border, radius, padding, same width as the header. Filters and tabs sit inside the top of
+   the card, not floating between header and card. Several cards stack with one fixed gap.
+   An empty state is the same card with the empty state inside, not a different dashed box.
+4. **Details** open as a side panel over the card as long as the person keeps working in the
+   list afterwards. A separate page only when editing takes longer than a glance.
+
+Nothing goes between subtext and the first card except a single metric row that passes rule 13.
 
 ## 3. Hard rules
 
@@ -82,82 +100,102 @@ Every rule can be checked on the screen. A broken rule is a finding, not a matte
    or "Hier". The same thing has the same word everywhere.
 5. **Nothing covers content.** Floating save buttons and sticky bars reserve their height as
    padding at the end of the page. No element hides another control.
+6. **Meta actions are icon buttons, content actions are words.** Log out, language, help,
+   close, more, settings of a table: icon button with `aria-label` and tooltip, 36 to 40 px hit
+   area. Actions on the content itself ("Stelle anlegen", "Termin bestätigen") stay labelled
+   buttons. A text link "Abmelden" next to the user name is a finding.
+7. **Row actions live in one overflow menu.** A table row carries at most one inline action
+   (the one done most often); everything else goes into a "more" icon button at the row end
+   and into the side panel. Destructive actions ("Sperren", "Löschen", "Schließen") are never
+   inline in the row and always confirm, saying what will happen.
 
 ### Information
 
-6. **Every piece of information has one source.** A value (progress, price, missing fields)
+8. **Every piece of information has one source.** A value (progress, price, missing fields)
    appears in full in one place and at most once more as a compact pointer that leads there.
    The same progress three times is two times too many.
-7. **A data field has a fixed meaning.** If the wage is missing, the slot says
+9. **A data field has a fixed meaning.** If the wage is missing, the slot says
    "Lohn auf Anfrage", not the start date as a stand-in. Missing values read "nicht angegeben"
    in muted colour, never blank, never a lone hyphen.
-8. **The comparison attribute is readable.** Whatever the person decides on (location, wage,
+10. **The comparison attribute is readable.** Whatever the person decides on (location, wage,
    date, status) is set at body size and full contrast, never only as a small caps eyebrow.
-9. **Numbers are data.** `font-variant-numeric: tabular-nums`, right aligned in tables, with a
+11. **Numbers are data.** `font-variant-numeric: tabular-nums`, right aligned in tables, with a
    unit, German format (`14,50 €/Std`, `01.10.2026`). IDs and codes in mono.
-10. **Time twice where it matters.** In timelines and activity both absolute and relative
+12. **Time twice where it matters.** In timelines and activity both absolute and relative
     ("Heute, 14:13 · vor 4 Stunden"). Deadlines as time left plus date ("noch 2 Tage, bis 03.10.").
-11. **No metric on its own.** Every number has a label, a reference period or comparison, and a
+13. **No metric on its own.** Every number has a label, a reference period or comparison, and a
     click target that opens the filtered list behind it. A number without an action is decoration.
+    A metric belongs to the page it sits on ("Aktive Abos" does not belong on Bewerbungen),
+    and a metric that counts the same thing as a filter chip is replaced by the chip's count.
+14. **A column that never varies is noise.** If every row says "Aktiv" or shows a dash, the
+    column shows only the exceptions ("Gesperrt", "Unbestätigt") and stays empty otherwise,
+    or goes away. The same holds for repeated words in a cell: "2", not "2 Bewerbungen" in a
+    column titled "Bewerber".
+15. **One line per value.** Emails, IDs and URLs never wrap mid-word; they truncate with
+    ellipsis and show in full on hover and in the panel. A row has one main line and at most
+    one muted meta line.
 
 ### Status and colour
 
-12. **Status is icon plus word plus tone colour.** Colour is never the only carrier. Every
+16. **Status is icon plus word plus tone colour.** Colour is never the only carrier. Every
     state lives in the project's central status vocabulary with exactly one rendering
     (see [references/patterns.md](references/patterns.md#status-vocabulary)).
-13. **Status and category look different.** Status: tinted pill with icon. Category
+17. **Status and category look different.** Status: tinted pill with icon. Category
     (industry, location, department): neutral chip, at most one coloured dot.
-14. **Colour is rationed.** The interface is neutral. Brand colour only for the primary action,
+18. **Colour is rationed.** The interface is neutral. Brand colour only for the primary action,
     active navigation, progress and links. Status colours only for status. No colourful tiles,
     no colour as decoration, no gradients on controls.
-15. **Warning before error.** Missing required fields are a hint before submitting (warn
+19. **Warning before error.** Missing required fields are a hint before submitting (warn
     tone), and an error only after a failed submit (danger tone). Red is for things that went wrong.
-16. **Done things step back but do not disappear.** Inactive, cancelled, completed records are
+20. **Done things step back but do not disappear.** Inactive, cancelled, completed records are
     muted across the whole row, stay visible and can be hidden by filter. Only the status
     carries colour.
 
 ### Presentation
 
-17. **Table before cards.** More than six objects of the same kind that get compared
+21. **Table before cards.** More than six objects of the same kind that get compared
     (applicants, bookings, jobs in the back office, invoices) are a table or a dense list.
     Cards only for few, dissimilar or image driven objects.
-18. **The back office is dense.** Row height 40 to 44 px, checkbox for bulk actions, sortable
-    columns, filters and sort stored in the URL, tabs show their count ("Neu 12"). Default
-    sort is "what has to be handled first" (oldest open first, then deadline), never alphabetical.
-19. **Applicants and clients are mobile first.** Every view works at 360 px width without
+22. **The back office is dense.** Row height 40 to 44 px, checkbox for bulk actions, sortable
+    columns, filters and sort stored in the URL, tabs and filter chips show their count
+    ("Neu 12", "Eingegangen 4"). Default sort is "what has to be handled first" (oldest open first, then deadline), never alphabetical.
+23. **Applicants and clients are mobile first.** Every view works at 360 px width without
     horizontal scrolling, touch targets at least 44 px, primary action within thumb reach.
-20. **One thing per section.** A card or section answers one question. A section with nothing
-    to say shrinks to one line or goes away (rule 22).
+24. **One thing per section.** A card or section answers one question. A section with nothing
+    to say shrinks to one line or goes away (rule 26).
 
 ### States
 
-21. **Loading shows the shape.** Skeletons in the real layout, no centred spinner. The skeleton
+25. **Loading shows the shape.** Skeletons in the real layout, no centred spinner. The skeleton
     appears after 300 ms without data, not before (no flicker).
-22. **Empty explains why and what now.** Every empty state names the reason and an action. If
+26. **Empty explains why and what now.** Every empty state names the reason and an action. If
     the reason is a blocker, name the blocker ("Bewerben kannst du, sobald dein Profil
     vollständig ist. Noch 10 Angaben."). Empty secondary sections are one line, not a full card.
-23. **Errors say what happened and what now.** No technical messages, no codes without text.
+27. **Errors say what happened and what now.** No technical messages, no codes without text.
     Input is preserved. Retry is a button, not an instruction.
-24. **Saving is visible.** Forms show their state: "Nicht gespeichert", "Speichert ...",
+28. **Saving is visible.** Forms show their state: "Nicht gespeichert", "Speichert ...",
     "Gespeichert vor 2 Min". Leaving with unsaved changes asks first.
-25. **Progress with remainder.** Checklists show "4 von 6 erledigt" plus a bar, open items with
+29. **Progress with remainder.** Checklists show "4 von 6 erledigt" plus a bar, open items with
     their own action per row, done items checked and muted.
 
 ### Tone
 
-26. **No marketing in the logged-in area.** Explanations are one sentence at most, the rest
+30. **No marketing in the logged-in area.** Explanations are one sentence at most, the rest
     behind "Mehr erfahren" or on the public site. A price appears in one place.
-27. **Greeting only with content.** "Hallo Max" on its own is not information. If there is a
+31. **Greeting only with content.** "Hallo Max" on its own is not information. If there is a
     greeting, it carries the state: "Hallo Max, noch 10 Angaben bis zur ersten Bewerbung."
-28. **The person's language.** Applicants are addressed informally if the product does,
+32. **The person's language.** Applicants are addressed informally if the product does,
     the back office is terse and professional. No internal terms (table names, enum values)
-    in the interface.
+    in the interface, and no technical details nobody acts on in the main view (URL slugs,
+    database IDs, internal flags). They go into the side panel, if anywhere.
 
 ## 4. Never built
 
 - Four metric tiles in four colours as the entry point, without click target or comparison.
 - Charts nobody needs for a decision. A chart needs a question it answers; then the `dataviz`
   skill applies.
+- Metric tiles above a table that repeat the counts of the filter chips below them.
+- A stack of two or more buttons in every table row.
 - Two filled buttons side by side. Two dark "feature" cards competing for attention.
 - A spinner in the middle of the page.
 - Tables with truncated content where the full value cannot be read via tooltip or panel.
@@ -180,9 +218,11 @@ For every view and every role before it counts as done. Every "no" is a finding.
    at, with realistic data and one extra long name?
 7. **Mobile** (applicant, client): 360 px, no horizontal scrolling, nothing covered.
 8. **Density** (back office): Do 15 rows fit on a 900 px tall screen? Is the default sort
-   "urgent first"?
+   "urgent first"? Does any column show the same value in every row?
 9. **Keyboard**: Is everything reachable by Tab in a sensible order, with visible focus?
 10. **Contrast**: Text at least 4.5:1, including muted text on tinted surfaces.
+11. **Shell**: Does the page use the shared shell, with one line of subtext, content inside
+    the standard card, same width and spacing as every other page?
 
 ## What this skill does not do
 

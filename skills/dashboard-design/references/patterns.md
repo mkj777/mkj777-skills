@@ -11,7 +11,7 @@ described in the patterns below; the TalentBridge tokens replace its colours.
 
 The overview is the page each role lands on. It answers the role card question, nothing else.
 
-### Applicant (Bewerber)
+### Applicant (Bewerber, at TalentBridge the paying customer)
 
 Question: "Can I apply, and where do my applications stand?"
 
@@ -28,7 +28,7 @@ Order, top to bottom:
 Empty sections below a blocker collapse into one line that names the blocker:
 "Bewerbungen und Vorschläge erscheinen, sobald dein Profil vollständig ist."
 
-### Client (Kunde, Personalbuchung)
+### Company client (books staff)
 
 Question: "Is my staff for the next assignments covered?"
 
@@ -38,7 +38,7 @@ Question: "Is my staff for the next assignments covered?"
 3. **Book staff** is the primary action.
 4. Invoices and history are navigation items, not overview content.
 
-### Back office (Disponent, Personalberater, Admin)
+### Back office (Vermittler, Disponent, Personalberater, Admin)
 
 Question: "What is waiting for me today?"
 
@@ -74,11 +74,22 @@ label, icon and tone. Components never pick colours for status themselves.
 | Booking | partially_staffed | Teilweise besetzt | circle-half | warn |
 | Booking | staffed | Besetzt | check | ok |
 | Booking | cancelled | Storniert | x | neutral (muted row) |
+| Job posting | draft | Entwurf | pencil | neutral |
+| Job posting | active | Aktiv | circle-dot | ok |
+| Job posting | expiring | Läuft in 2 Tagen ab | clock | warn |
+| Job posting | expired | Abgelaufen | clock-off | neutral (muted row) |
+| Job posting | archived | Archiviert | archive | neutral (muted row) |
+| Account | active | (nothing shown) | | |
+| Account | unconfirmed | Adresse unbestätigt | mail-question | warn |
+| Account | blocked | Gesperrt | ban | danger |
 | Invoice | open | Offen | file | info |
 | Invoice | overdue | Überfällig | alert-triangle | danger |
 | Invoice | paid | Bezahlt | check | ok |
 
-Rejections and cancellations are neutral, not red: nothing went wrong in the system, and red
+The normal state of an object is often shown as nothing at all (an active account), so the
+exceptions stand out (rule 14 in SKILL.md).
+
+Rejections, cancellations and expiry are neutral, not red: nothing went wrong in the system, and red
 on an applicant's own rejection is needlessly harsh. Danger is reserved for overdue, failed and
 broken.
 
@@ -95,17 +106,59 @@ broken.
 - Neutral background or outline, neutral text, optional 8 px coloured dot in front.
 - Used for location, industry, department, employment type.
 
-## Page header
+## App shell and sidebar
 
 ```
-[Breadcrumb or nothing on top level]
-Title as number or state                         [Secondary] [Primary]
-One line of description, muted
-[Tabs with counts]                    [Search] [Filter] [Sort] [View]
+[Logo, area label]
+Nav item                      [count]
+Nav item (active, tinted)     [count]
+...
+(spacer)
+[Avatar] Name                 [log out icon]
+         Team, location
+[language icon]
 ```
 
-- Title `text-2xl` to `text-3xl`, semibold. Description `text-sm` muted, max 72 characters.
-- The primary action sits at the same place on every page.
+- Navigation items show a count when something waits there (back office) or a dot when the
+  person has to act (Kundenbereich). Count and dot have an accessible label.
+- Log out, language and help are icon buttons with `aria-label` and tooltip, never text links.
+- The footer with legal links sits at the end of the page content, muted, not in a fixed bar.
+
+## Page shell
+
+```
+Title as number or state                                   [Primary]
+One line of scope, muted
+                    24 px
++--------------------------------------------------------------+
+| [Tabs or filter chips with counts]   [Search] [Sort] [View] |
+|--------------------------------------------------------------|
+| Content                                                      |
++--------------------------------------------------------------+
+                    16 px
++--------------------------------------------------------------+
+| Next card                                                    |
++--------------------------------------------------------------+
+```
+
+- One component for every page. Title `text-3xl` semibold, subtext `text-sm` muted, one line.
+- Header and cards share one content width. Forms limit their field width inside the card.
+- Card: `--card` background, 1 px `--border`, `--radius`, padding 24 px (16 px on mobile),
+  toolbar padding 12 px 16 px with a separator below. Tables sit edge to edge inside the card.
+- Cards stack with 16 px gap; sections with their own heading inside the card, not between cards.
+- Empty, loading and error states render inside the same card.
+
+## Row actions
+
+```
+| ... columns ...                     | [Most used action] [more icon] |
+```
+
+- At most one inline action, as a ghost button or icon button. Everything else in the
+  overflow menu, ordered by frequency, destructive last and in danger text, separated.
+- Destructive actions confirm in a dialog that names the object and the consequences, with the
+  destructive button labelled by the action ("Konto sperren"), never "OK".
+- Bulk actions appear in place of the toolbar when rows are selected.
 
 ## Table
 
